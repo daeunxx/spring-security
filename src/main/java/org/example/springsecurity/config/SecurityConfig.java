@@ -34,6 +34,7 @@ public class SecurityConfig {
     ).formLogin(login ->
         login
             .loginPage("/loginForm")
+            .loginProcessingUrl("/login") // /login 요청 시, 시큐리티가 낚아채서 대신 로그인 진행
             .defaultSuccessUrl("/") // 인증이 필요한 페이지에는 무조건 로그인하도록
     );
 
