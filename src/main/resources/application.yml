@@ -11,3 +11,14 @@ spring:
       naming:
         physical-strategy: org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl
     show-sql: true
+
+  devtools:
+    restart:
+      enabled: true
+    livereload:
+      enabled: true
+
+logging:
+  level:
+    org.hibernate.SQL: debug                          # sql? logger? ?? ??
+    org.hibernate.orm.jdbc.bind: trace

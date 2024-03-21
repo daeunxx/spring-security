@@ -2,6 +2,7 @@ package org.example.springsecurity.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
@@ -10,6 +11,7 @@ import org.springframework.security.web.SecurityFilterChain;
 
 @Configuration
 @EnableWebSecurity  // Spring security 필터 Spring 기본 체인에 등록
+@EnableMethodSecurity(securedEnabled = true)
 public class SecurityConfig {
 
   // 리턴되는 객체를 IoC 컨테이너에 등록

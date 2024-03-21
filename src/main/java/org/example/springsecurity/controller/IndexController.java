@@ -4,6 +4,8 @@ import org.example.springsecurity.domain.RoleType;
 import org.example.springsecurity.domain.User;
 import org.example.springsecurity.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.annotation.Secured;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -57,6 +59,20 @@ public class IndexController {
     userRepository.save(user);
 
     return "redirect:/loginForm";
+  }
+
+  // 페이지에 하나의 권한만 준다면 @Secured 사용
+  @Secured("ROLE_ADMIN")
+  @GetMapping("/info")
+  public @ResponseBody String info() {
+    return "개인정보";
+  }
+
+  // 페이지에 여러개의 권한을 준다면 @PreAuthorize 사용
+  @PreAuthorize("hasRole('ROLE_MANAGER') or hasRole('ROLE_ADMIN')")
+  @GetMapping("/data")
+  public @ResponseBody String data() {
+    return "데이터정보";
   }
 
 }
