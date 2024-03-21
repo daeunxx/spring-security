@@ -5,11 +5,18 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 
 @Configuration
 @EnableWebSecurity  // Spring security 필터 Spring 기본 체인에 등록
 public class SecurityConfig {
+
+  // 리턴되는 객체를 IoC 컨테이너에 등록
+  @Bean
+  public BCryptPasswordEncoder bCryptPasswordEncoder() {
+    return new BCryptPasswordEncoder();
+  }
 
   @Bean
   public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
@@ -26,7 +33,7 @@ public class SecurityConfig {
             .anyRequest().permitAll()
     ).formLogin(login ->
         login
-            .loginPage("/login")
+            .loginPage("/loginForm")
             .defaultSuccessUrl("/") // 인증이 필요한 페이지에는 무조건 로그인하도록
     );
 
