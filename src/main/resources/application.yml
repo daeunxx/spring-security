@@ -17,6 +17,17 @@ spring:
       enabled: true
     livereload:
       enabled: true
+  security:
+    oauth2:
+      client:
+        registration:
+          google:
+            client-id: 738306367438-6hteo5abjcvcgvhan6afsdjk5vntstvp.apps.googleusercontent.com
+            client-secret: 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
+            scope:
+              - email
+              - profile
+
 
 logging:
   level:
