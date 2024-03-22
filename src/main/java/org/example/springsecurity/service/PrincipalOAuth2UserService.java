@@ -1,5 +1,6 @@
 package org.example.springsecurity.service;
 
+import java.util.Map;
 import java.util.UUID;
 import org.example.springsecurity.domain.PrincipalDetails;
 import org.example.springsecurity.domain.RoleType;
@@ -39,19 +40,30 @@ public class PrincipalOAuth2UserService extends DefaultOAuth2UserService {
   @Override
   public OAuth2User loadUser(OAuth2UserRequest userRequest) throws OAuth2AuthenticationException {
     // OAuth2UserRequest는 액세스 토큰과 사용자 프로필 정보를 가지고 있음
-    System.out.println("userRequest.getClientRegistration() = " + userRequest.getClientRegistration());
-    System.out.println("userRequest.getAccessToken() = " + userRequest.getAccessToken().getTokenValue());
+//    System.out.println("userRequest.getClientRegistration() = " + userRequest.getClientRegistration().getRegistrationId());
+//    System.out.println("userRequest.getAccessToken() = " + userRequest.getAccessToken().getTokenValue());
     System.out.println("super.loadUser(userRequest) = " + super.loadUser(userRequest));
 
     // 사용자 프로필 정보를 가져옴
     OAuth2User oAuth2User = super.loadUser(userRequest);
+    OAuth2UserInfo oAuth2UserInfo;
 
-    String provider = userRequest.getClientRegistration().getRegistrationId(); // google
-    String providerId = oAuth2User.getAttribute("sub");
+    String provider = userRequest.getClientRegistration().getRegistrationId();
+    if (provider.equals("naver")) {
+
+      Map<String, Object> attributes = (Map<String, Object>) oAuth2User
+          .getAttributes().get("response");
+      oAuth2UserInfo = new OAuth2UserInfo(provider, attributes);
+      oAuth2UserInfo.setProviderId((String) attributes.get("id"));
+      
+    } else {
+      oAuth2UserInfo = new OAuth2UserInfo(provider, oAuth2User.getAttributes());
+    }
+
+    String providerId = oAuth2UserInfo.getProviderId();
     String username = provider + "_" + providerId;
     String uuid = UUID.randomUUID().toString().substring(0, 6);
-
-    OAuth2UserInfo oAuth2UserInfo = new OAuth2UserInfo(provider, oAuth2User.getAttributes());
+    String email = oAuth2UserInfo.getEmail();
 
     User user = userRepository.findByUsername(username);
 
@@ -59,7 +71,7 @@ public class PrincipalOAuth2UserService extends DefaultOAuth2UserService {
       user = new User()
           .setUsername(username)
           .setPassword(bCryptPasswordEncoder.encode(uuid))
-          .setEmail(oAuth2User.getAttribute("email"))
+          .setEmail(email)
           .setRole(RoleType.ROLE_USER);
 
       userRepository.save(user);

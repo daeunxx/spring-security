@@ -1,10 +1,10 @@
 package org.example.springsecurity.domain;
 
 import java.util.Map;
-import lombok.Getter;
+import lombok.Data;
 import lombok.NoArgsConstructor;
 
-@Getter
+@Data
 @NoArgsConstructor
 public class OAuth2UserInfo {
 
@@ -15,11 +15,16 @@ public class OAuth2UserInfo {
   private String name;
 
   public OAuth2UserInfo(String provider, Map<String, Object> attributes) {
+    this.provider = provider;
     this.attributes = attributes;
   }
 
   public String getProviderId() {
-    return (String) attributes.get("sub");
+    if (providerId == null) {
+      return (String) attributes.get("sub");
+    } else {
+      return providerId;
+    }
   }
 
   public String getEmail() {
