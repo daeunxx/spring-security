@@ -1,6 +1,6 @@
 package org.example.springsecurity.config;
 
-import org.example.springsecurity.config.oauth.PrincipalOAuth2UserService;
+import org.example.springsecurity.service.PrincipalOAuth2UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

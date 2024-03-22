@@ -1,6 +1,6 @@
 package org.example.springsecurity.controller;
 
-import org.example.springsecurity.auth.PrincipalDetails;
+import org.example.springsecurity.domain.PrincipalDetails;
 import org.example.springsecurity.domain.RoleType;
 import org.example.springsecurity.domain.User;
 import org.example.springsecurity.repository.UserRepository;

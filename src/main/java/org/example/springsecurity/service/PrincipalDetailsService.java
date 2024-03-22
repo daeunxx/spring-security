@@ -1,5 +1,6 @@
-package org.example.springsecurity.auth;
+package org.example.springsecurity.service;
 
+import org.example.springsecurity.domain.PrincipalDetails;
 import org.example.springsecurity.domain.User;
 import org.example.springsecurity.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;

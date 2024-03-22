@@ -7,10 +7,14 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 import lombok.Data;
+import lombok.NoArgsConstructor;
+import lombok.experimental.Accessors;
 
 @Entity
 @Data
 @Table(name = "users")
+@Accessors(chain = true)
+@NoArgsConstructor
 public class User extends BaseEntity {
 
   @Id @GeneratedValue
