@@ -48,11 +48,13 @@ public class PrincipalOAuth2UserService extends DefaultOAuth2UserService {
     String usernameAttribute = userRequest.getClientRegistration().getProviderDetails()
         .getUserInfoEndpoint().getUserNameAttributeName();
 
+    System.out.println("provider = " + provider);
+    System.out.println("usernameAttribute = " + usernameAttribute);
+
     OAuth2User oAuth2User = super.loadUser(userRequest);
     OAuth2Attribute oAuth2Attribute = OAuth2Attribute.of(provider, usernameAttribute,
         oAuth2User.getAttributes());
 
-    System.out.println("usernameAttribute = " + usernameAttribute);
     System.out.println(oAuth2User.getAttributes().get(usernameAttribute));
 
     User user = userRepository.findByUsername(oAuth2Attribute.getUsername());
