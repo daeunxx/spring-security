@@ -32,7 +32,7 @@ public class SecurityConfig {
     http.csrf(AbstractHttpConfigurer::disable);
 
     // ROLE_ 접두사 자동으로 붙여서 비교(ROLE_ 붙으면 Exception)
-    http.authorizeRequests(authorizeRequest ->
+    http.authorizeHttpRequests(authorizeRequest ->
         authorizeRequest
             .requestMatchers("/user/**").authenticated()  // 로그인만 하면 들어갈 수 있는 url
             .requestMatchers("/manager/**").hasAnyRole("MANAGER", "ADMIN")
