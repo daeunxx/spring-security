@@ -13,8 +13,8 @@ import lombok.experimental.Accessors;
 @Entity
 @Data
 @Table(name = "users")
-@Accessors(chain = true)
 @NoArgsConstructor
+@Accessors(chain = true)
 public class User extends BaseEntity {
 
   @Id @GeneratedValue
@@ -22,9 +22,9 @@ public class User extends BaseEntity {
   private String username;
   private String password;
   private String email;
-  private String provider;
-  private String providerId;
-
   @Enumerated(EnumType.STRING)
   private RoleType role;
+
+  private String provider;
+  private String providerId;
 }
