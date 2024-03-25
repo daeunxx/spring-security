@@ -1,6 +1,5 @@
 package org.example.springsecurity.service;
 
-import com.fasterxml.jackson.core.PrettyPrinter;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -23,7 +22,6 @@ public class OAuth2SuccessHandler implements AuthenticationSuccessHandler {
 
   @Autowired
   private final TokenService tokenService;
-  private final ObjectMapper objectMapper;
 
   @Override
   public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response,
@@ -35,18 +33,19 @@ public class OAuth2SuccessHandler implements AuthenticationSuccessHandler {
     Token token = tokenService.generateToken(username, RoleType.ROLE_USER);
     log.info("{}", token);
 
-    writeTokenResponse(response, token);
-  }
+    // 토큰 설정
+    response.setContentType("text/html");
+    response.setCharacterEncoding("UTF-8");
+    response.addHeader("access", token.getAccessToken());
+    response.addHeader("refresh", token.getRefreshToken());
 
-  private void writeTokenResponse(HttpServletResponse response, Token token) throws IOException {
-    response.setContentType("text/html;charset=UTF-8");
+    System.out.println(response.getHeader("access"));
+    System.out.println(response.getHeader("refresh"));
 
-    response.addHeader("Auth", token.getAccessToken());
-    response.addHeader("Refresh", token.getRefreshToken());
-    response.setContentType("application/json;charset=UTF-8");
-
-    var writer = response.getWriter();
-    writer.println(objectMapper.writer((PrettyPrinter) token));
-    writer.flush();
+    // json 형태로 반환
+    response.setContentType("application/json");
+    response.setCharacterEncoding("UTF-8");
+    response.getWriter().println(new ObjectMapper().writeValueAsString(token));
+    response.getWriter().flush();
   }
 }
