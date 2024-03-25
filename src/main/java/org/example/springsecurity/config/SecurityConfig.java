@@ -1,5 +1,6 @@
 package org.example.springsecurity.config;
 
+import org.example.springsecurity.service.OAuth2SuccessHandler;
 import org.example.springsecurity.service.PrincipalOAuth2UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
@@ -18,6 +19,9 @@ public class SecurityConfig {
 
   @Autowired
   private PrincipalOAuth2UserService principalOAuth2UserService;
+
+  @Autowired
+  private OAuth2SuccessHandler oAuth2SuccessHandler;
 
   // 리턴되는 객체를 IoC 컨테이너에 등록
   @Bean
@@ -48,7 +52,8 @@ public class SecurityConfig {
         // 코드는 이미 받음
         // 액세스 토큰과 사용자 프로필 정보를 request로 넘겨줌
         .userInfoEndpoint(endpoint -> endpoint
-            .userService(principalOAuth2UserService)));
+            .userService(principalOAuth2UserService))
+        .successHandler(oAuth2SuccessHandler));
 
     return http.build();
   }
