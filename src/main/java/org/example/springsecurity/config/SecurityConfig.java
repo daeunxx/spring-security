@@ -2,6 +2,7 @@ package org.example.springsecurity.config;
 
 import org.example.springsecurity.service.OAuth2SuccessHandler;
 import org.example.springsecurity.service.PrincipalOAuth2UserService;
+import org.example.springsecurity.service.TokenService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -11,6 +12,7 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 @Configuration
 @EnableWebSecurity  // Spring security 필터 Spring 기본 체인에 등록
@@ -19,9 +21,10 @@ public class SecurityConfig {
 
   @Autowired
   private PrincipalOAuth2UserService principalOAuth2UserService;
-
   @Autowired
   private OAuth2SuccessHandler oAuth2SuccessHandler;
+  @Autowired
+  private TokenService tokenService;
 
   // 리턴되는 객체를 IoC 컨테이너에 등록
   @Bean
@@ -38,6 +41,7 @@ public class SecurityConfig {
     // ROLE_ 접두사 자동으로 붙여서 비교(ROLE_ 붙으면 Exception)
     http.authorizeHttpRequests(authorizeRequest ->
         authorizeRequest
+            .requestMatchers("/token/**").authenticated()
             .requestMatchers("/user/**").authenticated()  // 로그인만 하면 들어갈 수 있는 url
             .requestMatchers("/manager/**").hasAnyRole("MANAGER", "ADMIN")
             .requestMatchers("/admin/**").hasRole("ADMIN")
@@ -53,7 +57,8 @@ public class SecurityConfig {
         // 액세스 토큰과 사용자 프로필 정보를 request로 넘겨줌
         .userInfoEndpoint(endpoint -> endpoint
             .userService(principalOAuth2UserService))
-        .successHandler(oAuth2SuccessHandler));
+        .successHandler(oAuth2SuccessHandler)
+    ).addFilterBefore(new JwtAuthFilter(tokenService), UsernamePasswordAuthenticationFilter.class);
 
     return http.build();
   }
