@@ -1,7 +1,6 @@
 package org.example.springsecurity.service;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import java.io.IOException;
@@ -25,7 +24,7 @@ public class OAuth2SuccessHandler implements AuthenticationSuccessHandler {
 
   @Override
   public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response,
-      Authentication authentication) throws IOException, ServletException {
+      Authentication authentication) throws IOException {
 
     PrincipalDetails principalDetails = (PrincipalDetails) authentication.getPrincipal();
     String username = principalDetails.getUser().getUsername();

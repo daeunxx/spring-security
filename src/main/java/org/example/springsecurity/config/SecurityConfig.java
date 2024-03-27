@@ -1,5 +1,6 @@
 package org.example.springsecurity.config;
 
+import org.example.springsecurity.repository.UserRepository;
 import org.example.springsecurity.service.OAuth2SuccessHandler;
 import org.example.springsecurity.service.PrincipalOAuth2UserService;
 import org.example.springsecurity.service.TokenService;
@@ -25,6 +26,8 @@ public class SecurityConfig {
   private OAuth2SuccessHandler oAuth2SuccessHandler;
   @Autowired
   private TokenService tokenService;
+  @Autowired
+  private UserRepository userRepository;
 
   // 리턴되는 객체를 IoC 컨테이너에 등록
   @Bean
@@ -58,7 +61,7 @@ public class SecurityConfig {
         .userInfoEndpoint(endpoint -> endpoint
             .userService(principalOAuth2UserService))
         .successHandler(oAuth2SuccessHandler)
-    ).addFilterBefore(new JwtAuthFilter(tokenService), UsernamePasswordAuthenticationFilter.class);
+    ).addFilterBefore(new JwtAuthenticationFilter(tokenService, userRepository), UsernamePasswordAuthenticationFilter.class);
 
     return http.build();
   }
